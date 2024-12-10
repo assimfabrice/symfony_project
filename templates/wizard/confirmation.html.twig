@@ -1,0 +1,25 @@
+{% extends 'front/base.html.twig' %}
+
+{% block body %}
+    <div class="container text-center mt-5">
+        <h3 class="text-success">Les documents ont été envoyés avec succès !</h3>
+        <p><strong>Vos documents ont été envoyés par email.</strong></p>
+
+        <h3>Liste des documents :</h3>
+        <ul class="list-group mt-3">
+
+            {% for document in documents %}
+                <li class="list-group-item">{{ document }}pdf </li>
+            {% endfor %}
+        </ul>
+
+        <div class="mt-4">
+            <!-- Formulaire pour le bouton précédent -->
+            <form action="{{ path('wizard_step2') }}" method="GET">
+                <!-- On ajoute un paramètre GET pour signaler qu'on vient de la page de confirmation -->
+                <input type="hidden"  name="previous-step2" value="true">
+                <button type="submit" id="previous-step2" class="btn btn-secondary">Précédent</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

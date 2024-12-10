@@ -1,0 +1,56 @@
+{% extends 'back/base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <h3 style="text-align: center;">Personnalisation des couleurs des champs</h3>
+
+        <div class="row row-cols-1 row-cols-md-3 g-4"> {# Disposition avec Bootstrap pour gérer 3 colonnes #}
+            {% for key, form in forms %}
+                <div class="col mb-4"> {# Une colonne pour chaque formulaire #}
+                    {% set rawString = form.vars.value.fieldName %}
+                    {% set extracted = rawString|replace({'societe[': '', ']': ''}) %}
+
+                    <h5>Champ: <strong>{{ extracted|trans }}</strong></h5>
+
+                    {{ form_start(form, {
+                        'attr': { 'id': 'form_' ~ form.vars.value.id },
+                        'action': path('app_fieldcolor_update_field_color', { 'fieldName': form.vars.value.id })
+                    }) }}
+
+                    {{ form_widget(form) }}
+                    <button type="submit" class="btn btn-secondary btn-sm mt-2">Enregistrer</button>
+                    {{ form_end(form) }}
+                </div>
+
+                {# La logique pour limiter à 3 par ligne est gérée via le CSS Bootstrap row-cols-3 #}
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="{{ asset('js/jscolor.js') }}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('form[id^="form_"]').forEach(form => {
+                form.addEventListener('submit', event => {
+                    event.preventDefault();
+                    const formData = new FormData(form);
+                    const action = form.getAttribute('action');
+
+                    fetch(action, {
+                        method: 'POST',
+                        body: formData,
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                alert('La couleur du champ a été enregistrée avec succès !');
+                            } else {
+                                alert('Une erreur est survenue.');
+                            }
+                        })
+                        .catch(error => console.error('Erreur:', error));
+                });
+            });
+        });
+    </script>
+{% endblock %}

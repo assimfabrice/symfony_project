@@ -1,0 +1,93 @@
+{% extends 'back/base.html.twig' %}
+
+{% block body %}
+    <style>
+        .close-popup {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .popup-header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            cursor: move; /* Indique que la zone est déplaçable */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        td{
+            text-align: center;
+        }
+    </style>
+    <h1>Log des listes des sociétés</h1>
+    <table class="table table-responsive">
+        <thead>
+        <tr>
+            <th>Nom de la société</th>
+            <th>Numero RCS</th>
+            <th>Siren</th>
+            <th>Siret</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for societe in societes %}
+            <tr data-societe-id="{{ societe.id }}">
+                <td>{{ societe.theNameOfTheCompany }}</td>
+                <td>{{ societe.rcsNumber }}</td>
+                <td>{{ societe.siren }}</td>
+                <td>{{ societe.siretOfTheCompany }}</td>
+                <td>
+                    <button class="btn btn-primary show-associates" data-societe-id="{{ societe.id }}">
+                        Voir les associés
+                    </button>
+                </td>
+            </tr>
+
+            <!-- Emplacement pour afficher les associés -->
+            <tr id="associates-{{ societe.id }}" style="display: none; position: relative;">
+                <td colspan="6">
+                    <div class="popup" id="popup-{{ societe.id }}">
+                        <div class="popup-header" id="popup-header-{{ societe.id }}">
+                            <span>Associés de <strong>{{ societe.theNameOfTheCompany }}</strong></span>
+                            <button class="close-popup">&times;</button>
+                        </div>
+                        <div class="popup-content associates-container"></div>
+                    </div>
+                </td colspan="100">
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".show-associates").forEach(button => {
+                button.addEventListener("click", () => {
+                    const societeId = button.dataset.societeId;
+                    const row = document.getElementById(`associates-${societeId}`);
+                    const container = row.querySelector(".associates-container");
+
+                    fetch(`/admin/societe/${societeId}/associates`)
+                        .then(response => response.text())
+                        .then(html => {
+                            container.innerHTML = html;
+                            row.style.display = "table-row";
+                        })
+                        .catch(error => console.error("Erreur lors du chargement :", error));
+
+                });
+            });
+            //close popup
+            document.querySelectorAll(".close-popup").forEach(button => {
+                button.addEventListener("click", () => {
+                    const popup = button.closest(".popup");
+                    popup.parentElement.parentElement.style.display = "none";
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,84 @@
+{# templates/form/step_one.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <h1>Informations de la société</h1>
+        
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            
+            <div class="signature-pad">
+                <canvas id="signature-pad" width="400" height="200"></canvas>
+            </div>
+            <button type="button" id="clear-signature">Effacer la signature</button>
+            
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Suivant</button>
+            </div>
+        {{ form_end(form) }}
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/4.1.5/signature_pad.umd.min.js"></script>
+    <script>
+        const canvas = document.getElementById('signature-pad');
+        const signaturePad = new SignaturePad(canvas);
+        const signatureInput = document.querySelector('input[name="company_info[signature]"]');
+        
+        document.getElementById('clear-signature').addEventListener('click', () => {
+            signaturePad.clear();
+        });
+        
+        document.querySelector('form').addEventListener('submit', (e) => {
+            if (!signaturePad.isEmpty()) {
+                signatureInput.value = signaturePad.toDataURL();
+            } else {
+                e.preventDefault();
+                alert('Veuillez signer le formulaire');
+            }
+        });
+    </script>
+{% endblock %}
+
+{# templates/form/step_two.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <h1>Informations de l'associé</h1>
+        
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            
+            <div class="signature-pad">
+                <canvas id="signature-pad" width="400" height="200"></canvas>
+            </div>
+            <button type="button" id="clear-signature">Effacer la signature</button>
+            
+            <div class="mt-4">
+                <a href="{{ path('step_one') }}" class="btn btn-secondary">Précédent</a>
+                <button type="submit" class="btn btn-primary">Terminer</button>
+            </div>
+        {{ form_end(form) }}
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/4.1.5/signature_pad.umd.min.js"></script>
+    <script>
+        const canvas = document.getElementById('signature-pad');
+        const signaturePad = new SignaturePad(canvas);
+        const signatureInput = document.querySelector('input[name="associate_info[signature]"]');
+        
+        document.getElementById('clear-signature').addEventListener('click', () => {
+            signaturePad.clear();
+        });
+        
+        document.querySelector('form').addEventListener('submit', (e) => {
+            if (!signaturePad.isEmpty()) {
+                signatureInput.value = signaturePad.toDataURL();
+            } else {
+                e.preventDefault();
+                alert('Veuillez signer le formulaire');
+            }
+        });
+    </script>
+{% endblock %}

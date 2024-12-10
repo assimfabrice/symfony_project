@@ -1,0 +1,140 @@
+{% extends 'front/base.html.twig' %}
+
+{% block body %}
+    <h1 class="text-center mb-4">Étape 2 : Informations des associés</h1>
+
+    {{ form_start(form) }}
+
+    <!-- Progress bar -->
+    <div class="progress mb-4">
+        <div class="progress-bar bg-primary" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+
+    <!-- Conteneur des associés -->
+    <div class="associates mb-4"
+         data-index="{{ form.associates|length > 0 ? form.associates|last.vars.name + 1 : 0 }}"
+         data-prototype="{{ form_widget(form.associates.vars.prototype)|e('html_attr') }}">
+        {% for associateForm in form.associates %}
+            <div class="associate-item mb-3 p-3 border rounded">
+                <!-- Bouton toggle -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-action="toggle-associate">
+                        Cacher
+                    </button>
+                </div>
+                <!-- Contenu de l'associé -->
+                <div class="associate-content">
+                    {{ form_row(associateForm) }}
+                </div>
+                <!-- Bouton Supprimer -->
+                <div class="text-end mt-2">
+                    <button type="button" class="btn btn-danger btn-sm" data-action="delete-associate">Supprimer</button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Bouton "Ajouter un associé" -->
+    <div class="text-center mb-4">
+        <button type="button" class="btn btn-success" data-action="add-associate">Ajouter un associé</button>
+    </div>
+
+    <!-- Boutons "Précédent" et "Envoyer" -->
+    <div class="d-flex justify-between">
+        <button type="submit" name="previous" id="previous-button" class="btn btn-secondary">Précédent</button>
+        &nbsp;<button type="submit" class="btn btn-primary">Envoyer</button>
+    </div>
+    {{ form_end(form) }}
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector("form");
+
+            // Bouton "Précédent"
+            document.getElementById("previous-button").addEventListener("click", function() {
+                form.noValidate = true;
+                window.location.href = "{{ path('wizard_step1') }}";
+            });
+
+            // Gestion des associés
+            const associatesContainer = document.querySelector('.associates');
+            const addButton = document.querySelector('[data-action="add-associate"]');
+
+            // Ajout d'un nouvel associé
+            addButton.addEventListener('click', function() {
+                const prototype = associatesContainer.dataset.prototype;
+                const index = associatesContainer.dataset.index;
+
+                const newForm = prototype.replace(/__name__/g, index);
+                const div = document.createElement('div');
+                div.classList.add('associate-item', 'mb-3', 'p-3', 'border', 'rounded');
+
+                div.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-action="toggle-associate">
+                                Afficher
+                        </button>
+                    </div>
+                    <div class="col"><div class="text-end mt-2">
+                            <label class="form-control" style="text-align: center;"><b>Associé ${parseInt(index) + 1}</b></label>
+                        </div>
+                    </div>
+                    <div class="associate-content">
+                        ${newForm}
+                    </div>
+                    <div class="text-end mt-2">
+                        <button type="button" class="btn btn-danger btn-sm" data-action="delete-associate">Supprimer l'associé ${parseInt(index) + 1}</button>
+                    </div>
+                `;
+
+                associatesContainer.appendChild(div);
+                associatesContainer.dataset.index = parseInt(index) + 1;
+                //couleurs des champs
+                const fields = document.querySelectorAll('input');
+                handleColors(fields);
+            });
+
+            // Gestion des actions sur les boutons dynamiques
+            document.addEventListener('click', function(e) {
+                // Suppression d'un associé
+                if (e.target.matches('[data-action="delete-associate"]')) {
+                    if (confirm('Voulez-vous vraiment supprimer cet associé?')) {
+                        e.target.closest('.associate-item').remove();
+                    }
+                }
+
+                // Toggle (afficher/masquer) d'un associé
+                if (e.target.matches('[data-action="toggle-associate"]')) {
+                    const content = e.target.closest('.associate-item').querySelector('.associate-content');
+                    if (content.style.display === 'none') {
+                        content.style.display = '';
+                        e.target.textContent = 'Cacher';
+                    } else {
+                        content.style.display = 'none';
+                        e.target.textContent = 'Afficher';
+                    }
+                }
+            });
+            //couleurs des champs
+            const fields = document.querySelectorAll('input');
+            handleColors(fields);
+        });
+        async function handleColors(fields) {
+            const response = await fetch('/ffieldcolor/api/field-colors/associate')
+            const color = await response.json()
+            const emptyColor = color.emptyColor
+            const filledColor = color.filledColor
+
+            fields.forEach(field => {
+                field.addEventListener('input', () => {
+                    if (field.value.trim() === '') {
+                        field.style.border = `4px solid ${emptyColor}`; // Rouge si vide
+                    } else {
+                        field.style.border = `4px solid ${filledColor}`; // Vert si rempli
+                    }
+                });
+            });
+        }
+    </script>
+{% endblock %}

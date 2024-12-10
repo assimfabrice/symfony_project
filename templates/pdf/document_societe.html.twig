@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; }
+        h1 { text-align: center; color: #333; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 8px; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+{% set signature = signaturePath %}
+<h1>Document de Société</h1>
+<img src="{{ asset('pdf/signature_321.png') }}" alt="Signature de la société" style="width: 150px;">
+{% if signaturePath %}
+
+{% endif %}
+</body>
+</html>

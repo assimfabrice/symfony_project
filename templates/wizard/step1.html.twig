@@ -1,0 +1,124 @@
+{% extends 'front/base.html.twig' %}
+
+{% block body %}
+
+    <h1>Étape 1 : Informations de la société</h1>
+
+    {{ form_start(form) }}
+    <!-- Progress bar -->
+    <div class="progress mb-4">
+        <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <h2 class="text" style="margin-left:5%"> TUP-Transfrontalière - Formulaire à remplir </h2>
+    <p class=text-center style=color:red></p> <p class=text-center style=text-align:justify;margin-left:5%>Veuillez SVP sélectionner dans le menu ci-dessous, le statut juridique de votre société actuelle; si vous vous reconnectez plus tard et que vous avez commencé à remplir les champs ci-dessous, merci de sélectionner à nouveau, lors de votre nouvelle connexion, le statut juridique de votre société actuelle : vous verrez alors s'afficher vos données sauvegardées, vous n'aurez pas besoin de remplir les champs déjà remplis lors de votre précédente visite.</p>
+    <br>
+    {{ form_row(form.companyType, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Choisissez le type de société.'}}) }}
+    {{ form_row(form.theNameOfTheCompany, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Entrez le nom exact de la société.'}}) }}
+    {{ form_row(form.addressOfTheCompany, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Entrez l\'adresse de la société.'}}) }}
+    {{ form_row(form.city, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Entrez la ville de la société.'}}) }}
+    {{ form_row(form.postalCode, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Entrez le code postal.'}}) }}
+    {{ form_row(form.rcsNumber, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Entrez le numéro RCS.'}}) }}
+    {{ form_row(form.siren, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Entrez le numéro Siren.'}}) }}
+    {{ form_row(form.siretOfTheCompany, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Entrez le siret de la société.'}}) }}
+    {{ form_row(form.activity, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Entrez l\'activité de la société.'}}) }}
+    {{ form_row(form.nameOfTheAbsorbingCompany, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Saisir le nom de la société absorbante.'}}) }}
+    {{ form_row(form.IdentificationNumber, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Siaisr le numéro d\'identification de la société absorbante.'}}) }}
+    {{ form_row(form.representativeOfTheCompany, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Saisir le nom, prénom du représentant de la société.'}}) }}
+    {{ form_row(form.AddressOfTheLegalRepresentative, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Saisir l\'adresse du représentant légal.'}}) }}
+    {{ form_row(form.postalCodeOfTheLegalRepresentative, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Saisir le code postal du représentant légal.'}}) }}
+    {{ form_row(form.cityOfTheLegalRepresentative, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Saisir la ville du représentant légal.'}}) }}
+    {{ form_row(form.countryOfTheLegalRepresentative, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Saisir le pays du représentant légal.'}}) }}
+    {{ form_row(form.dateOfBirthOfTheLegalRepresentative, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Sélectionnez la date de naissance du représentant légal.'}}) }}
+    {{ form_row(form.nationalityOfTheLegalRepresentative,{'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Saisir la nationalité du représentant légal.'}}) }}
+    {{ form_row(form.dayMonthYearOfDissolution, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Sélectionnez le jour,mois,année du représentant légal.'}}) }}
+    {{ form_row(form.numberOfShares,{'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Saisir des valeurs positives pour le nombre de parts sociales.'}}) }}
+    {{ form_row(form.amountOfAShare, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Saisir des valeurs positives pour le montant de la part sociale.'}}) }}
+    {{ form_row(form.amountOfPassiveSociete, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Saisir des valeurs positives pour le montant passif de la société.'}}) }}
+    {{ form_row(form.amountOfActiveSociete, {'attr': {'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', 'title': 'Saisir des valeurs positives pour le montant actif de la société au jour du PV d\'assembléé.'}}) }}
+        <div class="signature-pad">
+            <canvas id="signature-pad" width="400" height="200" style="border: 1px solid #000;"></canvas>
+            <button type="button" class="btn btn-secondary" id="clear-signature-societe">Nettoyer</button>
+            signature {{ form_widget(form.signaturePath) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Suivant</button>
+    {{ form_end(form) }}
+
+<script src="{{ asset('js/signature_pad.min.js') }}"></script>
+<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('js/flatpickr.js') }}"></script>
+<script src="{{ asset('js/fr.js') }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Initialisation des tooltips Bootstrap
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        const canvas = document.querySelector("#signature-pad");
+        const signaturePad = new SignaturePad(canvas);
+        const signatureInput = document.querySelector("#societe_signaturePath");
+        // Si la signature existe, la charger dans le canvas
+        if (signatureInput.value) {
+            const img = new Image();
+            img.src = signatureInput.value; // Charger la signature encodée en Base64
+            img.onload = function() {
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            };
+        }
+        document.querySelector("form").addEventListener("submit", function() {
+            signatureInput.value = signaturePad.toDataURL();
+        });
+        //cliquer clear
+        const clearButton = document.getElementById('clear-signature-societe');
+        clearButton.addEventListener('click', function() {
+            signaturePad.clear();
+        });
+        //couleur
+        fetch('/ffieldcolor/api/field-colors') // Route pour récupérer les couleurs
+            .then(response => response.json())
+            .then(colors => {
+                const fields = document.querySelectorAll('.form-control');
+                fields.forEach(field => {
+                    const color = colors[field.name];
+                    if (color) {
+                        field.addEventListener('input', () => {
+                            field.style.border = field.value.trim()
+                                ? `4px solid ${color.filledColor}`
+                                : `4px solid ${color.emptyColor}`;
+                        });
+                    }
+                });
+            });
+        //flatpick
+        flatpickr('.js-flatpickr', {
+            dateFormat: 'Y-m-d',  // Format de date,
+            "locale": "fr"
+        });
+        //change
+        document.querySelector('#societe_companyType').addEventListener('change', function () {
+            const type = this.value;
+
+            fetch(`/wizard/change-type/${type}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    for (const [key, value] of Object.entries(data)) {
+                        const input = document.querySelector(`#societe_${key}`);
+                        if (input) input.value = value;
+
+                    }
+                });
+        });
+    });
+</script>
+
+
+{% endblock %}

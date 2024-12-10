@@ -1,0 +1,93 @@
+{% extends 'back/base.html.twig' %}
+{% block body %}
+    <style src="{{ asset('css/boostrap.min.css') }}"></style>
+    <div class="container mt-4">
+        <div class="row">
+            <h1 style="text-align: center;">Gestion des types de sociétés et documents</h1>
+            <div class="col-md-6">
+                <h4>Type de société</h4>
+                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#companyTypeModal">Ajouter une type de Société</button>
+                <!-- Tableau en haut -->
+                <div class="table-responsive mb-4">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nom</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for companyType in companyTypes %}
+                            <tr>
+                                <td>{{ companyType.id }}</td>
+                                <td style="text-align: center;">{{ companyType.name }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <h4>Documents</h4>
+                    {% include 'document/_filter_document.html.twig' with {form: formSearchDocument} %}
+                <!-- Tableau en bas -->
+                <div class="table-responsive">
+                    <div class="mt-4">
+                        {{ knp_pagination_render(documents) }}
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th>Type de Société</th>
+                            <!--<th>Actions</th>-->
+                            <th>Modifier</th>
+                            <th>Supprimer</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for document in documents %}
+                            <tr>
+                                <td style="text-align: center;">{{ document.title }}</td>
+                                <td style="text-align: center;">{{ document.companyType }}</td>
+                                <td><a href="{{ path('app_document_edit', { id: document.id }) }}" class="btn btn-warning btn-sm">Modifier</a></td>
+                                <td>
+                                    <form
+                                            method="post"
+                                            action="{{ path('app_document_delete', { id: document.id }) }}"
+                                            style="display:inline-block;"
+                                            onsubmit="return confirm('Vous êtes ur de supprimer?')"
+                                    >
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Modal pour type de société -->
+    <div class="modal fade" id="companyTypeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ajouter une un type de société</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{ form_start(companyTypeForm) }}
+                    {{ form_widget(companyTypeForm) }}
+                    <button type="submit" class="btn btn-success mt-3">Valider</button>
+                    {{ form_end(companyTypeForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <style src="{{ asset('js/bootstrap.bundle.min.js') }}"></style>
+{% endblock %}

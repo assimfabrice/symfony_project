@@ -1,0 +1,246 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Personnalisation légère pour rendre le formulaire plus attractif */
+        .form-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #495057;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .btn-primary, .btn-secondary {
+            margin-top: 1rem;
+        }
+        .sticky-placeholder-buttons {
+            position: fixed;
+            top: 20px;
+            left: 20px; /* Position initiale à gauche */
+            background-color: #fff;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            z-index: 9999;
+            max-width: 280px; /* Largeur maximale */
+            width: 100%;
+            height: 600px; /* Hauteur initiale */
+            overflow: auto; /* Ajoute un défilement si nécessaire */
+            transition: transform 0.3s ease;
+            cursor: move; /* Indique que l'élément est déplaçable */
+            resize: both; /* Permet le redimensionnement */
+            min-height: 150px; /* Hauteur minimale */
+        }
+
+        .sticky-placeholder-buttons:hover {
+            transform: scale(1.05); /* Effet de zoom au survol */
+        }
+
+        .sticky-placeholder-buttons label {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .sticky-placeholder-buttons ul {
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+            max-height: 100%; /* Limite la hauteur des éléments de la liste */
+        }
+
+        .sticky-placeholder-buttons ul li {
+            margin-bottom: 10px;
+        }
+
+        .sticky-placeholder-buttons ul li button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            text-align: left;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .sticky-placeholder-buttons ul li button:hover {
+            background-color: #0056b3;
+            cursor: pointer;
+            transform: translateX(5px);
+        }
+
+        .sticky-placeholder-buttons ul li button:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+
+    <h1 class="form-title">Créer un Document</h1>
+    <div class="container form-container">
+        {{ form_start(form, { 'attr':{'class': 'row g-3'} }) }}
+        {{ form_row(form.title) }}
+        {{ form_row(form.companyType) }}
+        <div class="col-12">
+            {{ form_label(form.paragraphe) }}
+            {{ form_widget(form.paragraphe, { 'attr': {'class': 'ckeditor-dynamic form-control', 'placeholder': 'Saisissez le contenu principal ici'} }) }}
+        </div>
+
+        <div class="col-12">
+            <label class="form-label">Paragraphes dynamiques</label>
+            <div id="paragraphes-dynamiques" data-prototype="{{ form_widget(form.paragraphes.vars.prototype)|e('html_attr') }}">
+                {% for paragraphe in form.paragraphes %}
+                    <div class="paragraph-item mb-2 position-relative">
+                        {{ form_widget(paragraphe, { 'attr': {'class': 'form-control', 'placeholder': 'Paragraphe dynamique'} }) }}
+                        <button type="button" onclick="removeParagraph(this)" class="btn-close position-absolute top-0 end-0 mt-2 me-2"></button>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" onclick="addParagraph()" class="btn btn-secondary mt-3">Ajouter un paragraphe</button>
+        </div>
+        <!-- Boutons pour insérer des placeholders dynamiques -->
+        <div class="mb-3 sticky-placeholder-buttons">
+            <label>Insérer des champs dynamiques :</label>
+            <ul>
+                {% for placeholder in placeholders %}
+                    <li>
+                        <button type="button" onclick="insertPlaceholder('{{ placeholder.alias }}')">
+                            {{ placeholder.translated }}
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-12 d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary">Enregistrer le Document</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+    <script>
+
+        let indexParagraphes = {{ form.paragraphes|length }}; // Initialise l'index des paragraphes dynamiques
+
+        function addParagraph() {
+
+            const container = document.getElementById('paragraphes-dynamiques');
+            const prototype = container.getAttribute('data-prototype').replace(/__name__/g, indexParagraphes);
+
+            const newParagraph = document.createElement('div');
+            newParagraph.className = 'paragraph-item mb-2 position-relative';
+            newParagraph.innerHTML = prototype + '<button type="button" onclick="removeParagraph(this)" class="btn-close position-absolute top-0 end-0 mt-2 me-2"></button>';
+
+            container.appendChild(newParagraph);
+            // Appliquer CKEditor sur le nouveau champ ajouté
+            const newTextarea = newParagraph.querySelector('.ckeditor-dynamic');
+            if (newTextarea) {
+                initCKEditor(newTextarea);
+            }
+
+            indexParagraphes++;
+        }
+        function initCKEditor(element) {
+            if (element && !CKEDITOR.instances[element.id]) {
+                CKEDITOR.replace(element, {
+                    extraPlugins: 'colorbutton',  // Assurez-vous que le plugin est bien activé
+                    toolbar: [
+                        { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'TextColor', 'BGColor'] },
+                        { name: 'paragraph', items: ['NumberedList', 'BulletedList'] },
+                        { name: 'insert', items: ['Image', 'Table'] },
+                        { name: 'styles', items: ['Format'] }
+                    ],
+                    height: 300  // Ajustez la hauteur comme nécessaire
+                });
+            }
+        }
+
+        // Initialiser CKEditor pour les champs existants
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.ckeditor-dynamic').forEach(function(element) {
+                initCKEditor(element);
+            });
+            const observer = new MutationObserver(function (mutationsList) {
+                for (let mutation of mutationsList) {
+                    if (mutation.type === 'childList') {
+                        const warning = document.querySelector('.cke_notifications_area');
+                        if (warning) {
+                            warning.style.display = 'none';
+                        }
+                    }
+                }
+            });
+
+            // Observer la cible où CKEditor insère ses éléments
+            observer.observe(document.body, { childList: true, subtree: true });
+        });
+
+        function removeParagraph(button) {
+            const paragraphItem = button.closest('.paragraph-item');
+            if(confirm('Vous êtes sur de supprimer ce paragraphe?')){
+                const paragraphItem = button.closest('.paragraph-item');
+                // Détruire l'instance CKEditor avant de supprimer l'élément
+                const editor = paragraphItem.querySelector('.ckeditor-dynamic');
+                if (editor && editor.id && CKEDITOR.instances[editor.id]) {
+                    CKEDITOR.instances[editor.id].destroy();
+                }
+                paragraphItem.remove();
+            }
+        }
+        // Initialiser CKEditor pour tous les paragraphes dynamiques existants au chargement de la page
+        //insertion des placeholders
+        // Fonction modifiée pour insérer des placeholders
+        function insertPlaceholder(placeholder) {
+            const activeEditor = CKEDITOR.currentInstance;
+            if (activeEditor) {
+                activeEditor.insertText(placeholder);
+            }
+        }
+
+        // Déplacement de l'éléménet de gauche à droite
+        const draggableElement = document.querySelector('.sticky-placeholder-buttons');
+
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        draggableElement.addEventListener('mousedown', function(e) {
+            isDragging = true;
+            offsetX = e.clientX - draggableElement.getBoundingClientRect().left;
+            offsetY = e.clientY - draggableElement.getBoundingClientRect().top;
+            draggableElement.style.transition = 'none'; // Désactiver la transition pendant le déplacement
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (isDragging) {
+                const x = e.clientX - offsetX;
+                const y = e.clientY - offsetY;
+                draggableElement.style.left = `${x}px`;
+                draggableElement.style.top = `${y}px`;
+            }
+        });
+
+        document.addEventListener('mouseup', function() {
+            isDragging = false;
+            draggableElement.style.transition = 'transform 0.3s ease'; // Réactiver la transition après le déplacement
+        });
+
+
+    </script>
+
+{% endblock %}

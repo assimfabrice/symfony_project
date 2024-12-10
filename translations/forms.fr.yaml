@@ -1,0 +1,32 @@
+The name of the company: Le nom de la société
+Address of the company: Adresse de la société
+Please sign in: Connectez-vous s'il vous plait
+City: Ville
+Postal code: Code postal
+Rcs number: Numéro RCS  (ville + lettre + 9 chiffres )
+Company type: 'Votre société est une:'
+Siren: 'Siren (9 chiffres)'
+Siret of the company: "Siret de la société"
+Activity: "Objet (activité) de la société"
+Name of the absorbing company: "Nom de la société absorbante"
+Identification number: "Numéro d'identification (Company Number) de la société absorbante"
+Address of the legal representative: 'Adresse du représentant légal'
+Postal code of the legal representative: 'Code postal du représentant légal'
+City of the legal representative: 'Ville du représentant légal'
+Country of the legal representative: 'Pays du représentant légal'
+Date of birth of the legal representative: 'Date de naissance du représentant légal'
+Nationality of the legal representative: 'Nationalité du représentant légal'
+Day month year of dissolution: 'Jour, mois, année de la dissolution'
+Number of shares: 'Nombre de parts sociales'
+Amount of a share: 'Montant d’une part sociale'
+Amount of passive societe: "Montant du passif de la société au jour du PV d’assemblée"
+Amount of active societe: "Montant de l’actif de la société au jour du PV d’assemblée"
+Representative of the company: 'NOM et Prénom du représentant légal de la société'
+Civility: "Civilité de l'associé (Mme , Mlle , Mr)"
+Firstname: "Nom de l'associé"
+Lastname: "Prénom de l'associé"
+Address: "Son adresse"
+Country: "Pays"
+Date of birth: "Date de naissance"
+Nationality: "Nationalité"
+

@@ -1,0 +1,213 @@
+body.body_front {
+    display: flex;
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.logo-section {
+    background-color: #343a40;
+    color: white;
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.logo-section img {
+    max-width: 80%;
+    height: auto;
+}
+
+.form-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h3 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-container .form-control {
+    margin-bottom: 15px;
+}
+
+.form-container button {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .logo-section {
+        width: 100%;
+        height: 150px;
+    }
+
+    .form-section {
+        padding: 20px;
+    }
+}
+.body_backend{
+    display: none;
+}
+/* Personnalisation légère pour rendre le formulaire plus attractif */
+.form-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #495057;
+    font-weight: bold;
+    text-align: center;
+}
+
+.btn-primary, .btn-secondary {
+    margin-top: 1rem;
+}
+.sticky-placeholder-buttons {
+    position: fixed;
+    top: 20px;
+    right: 150px; /* Position initiale à gauche */
+    background-color: #fff;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 9999;
+    max-width: 280px; /* Largeur maximale */
+    width: 100%;
+    height: 600px; /* Hauteur initiale */
+    overflow: auto; /* Ajoute un défilement si nécessaire */
+    transition: transform 0.3s ease;
+    cursor: move; /* Indique que l'élément est déplaçable */
+    resize: both; /* Permet le redimensionnement */
+    min-height: 150px; /* Hauteur minimale */
+}
+
+.sticky-placeholder-buttons:hover {
+    transform: scale(1.05); /* Effet de zoom au survol */
+}
+
+.sticky-placeholder-buttons label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #495057;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.sticky-placeholder-buttons ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    max-height: 100%; /* Limite la hauteur des éléments de la liste */
+}
+
+.sticky-placeholder-buttons ul li {
+    margin-bottom: 10px;
+}
+
+.sticky-placeholder-buttons ul li button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    text-align: left;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.sticky-placeholder-buttons ul li button:hover {
+    background-color: #0056b3;
+    cursor: pointer;
+    transform: translateX(5px);
+}
+
+.sticky-placeholder-buttons ul li button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+th{
+    text-align: center;
+}
+/** menu et sous menu **/
+.sidebar .submenu {
+    display: none;
+    padding-left: 15px;
+}
+.sidebar .menu-header {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    padding: 5px 0;
+}
+.sidebar .menu-header::after {
+    content: ' ▼';
+    position: absolute;
+    right: 0;
+    font-size: 0.7em;
+}
+.sidebar .menu-header.active::after {
+    content: ' ▲';
+}
+.sidebar .submenu.show {
+    display: block;
+}
+.sidebar .submenu a {
+    display: block;
+    padding: 5px 0;
+}
+.submenu {
+    display: none; /* Caché par défaut */
+    margin-left: 20px;
+}
+
+.submenu a {
+    display: block;
+    margin: 5px 0;
+}
+
+.submenu.open {
+    display: block; /* Affiché lorsque la classe "open" est ajoutée */
+}
+
+.sidebar .menu-item {
+    margin-bottom: 10px;
+}
+#signature-pad {
+    display: block !important;
+}
+/* Icône pour les menus avec sous-menus (triangle vers la droite quand replié) */
+.nav-item .nav-link.has-submenu.collapsed::after {
+    content: '\25B6'; /* Triangle vers la droite */
+    float: right;
+    transition: transform 0.3s ease;
+}
+
+/* Icône pour les menus avec sous-menus (triangle vers le bas quand déplié) */
+.nav-item .nav-link.has-submenu:not(.collapsed)::after {
+    content: '\25BC'; /* Triangle vers le bas */
+    float: right;
+    transition: transform 0.3s ease;
+}

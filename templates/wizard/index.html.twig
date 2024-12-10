@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="progress mb-4">
+            <div class="progress-bar" role="progressbar" style="width: {{ (step * 33.33) }}%"
+                 aria-valuenow="{{ step * 33.33 }}" aria-valuemin="0" aria-valuemax="100">
+                Étape {{ step }}/3
+            </div>
+        </div>
+
+        {{ form_start(form) }}
+        <div class="card">
+            <div class="card-header">
+                <h2>Étape {{ step }}</h2>
+            </div>
+            <div class="card-body">
+                {{ form_widget(form) }}
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                {% if step > 1 %}
+                    <button type="submit" name="precedent" class="btn btn-secondary">Précédent</button>
+                {% else %}
+                    <div></div>
+                {% endif %}
+
+                {% if step < 3 %}
+                    <button type="submit" name="suivant" class="btn btn-primary">Suivant</button>
+                {% else %}
+                    <button type="submit" name="envoyer" class="btn btn-success">Envoyer</button>
+                {% endif %}
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

@@ -1,0 +1,15 @@
+
+{{ form_start(form, {attr: {class:'filter'}}) }}
+    <div class="row">
+        <a href="{{ path('app_document_new') }}" class="btn btn-primary">Ajouter un nouveau document</a>
+        <div class="col-md-6">
+            <div class="mt-2">
+            {{ form_row(form.title) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.companyType) }}
+        </div>
+    </div>
+<button type="submit" class="btn btn-primary w-100">Filtrer</button>
+{{ form_end(form) }}

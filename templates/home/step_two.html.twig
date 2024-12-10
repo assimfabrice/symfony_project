@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <h1>Informations de l'associé</h1>
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+
+
+        <button type="button" id="clear-signature">Effacer la signature</button>
+
+        <div class="mt-4">
+            <a href="{{ path('app_index') }}" class="btn btn-secondary">Précédent</a>
+            <button type="submit" class="btn btn-primary">Terminer</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+

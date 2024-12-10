@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+</head>
+<body>
+<h1>{{ title }}</h1>
+
+{% if paragraphe %}
+    <p>{{ paragraphe | raw }}</p>
+    {% if '{getAssociates?}' in paragraphe %}
+        {% set associates = paragraphe | raw  %}
+        <ul>
+            {% for associate in associates %}
+                <li>{{ associate.name }} - {{ associate.role }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endif %}
+
+{% if paragraphes is not empty %}
+    <div>
+        {% for paragraphe in paragraphes %}
+            <p>{{ paragraphe | raw }}</p>
+            {% if '{getAssociates?}' in paragraphe %}
+                {% set associates = paragraphe | raw %}
+                <ul>
+                    {% for associate in associates %}
+                        <li>{{ associate.name }} - {{ associate.role }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+</body>
+</html>

@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <h1>Recherche de documents</h1>
+
+        {{ form_start(searchForm, {'attr': {'class': 'mb-4'}}) }}
+        <div class="row">
+            <div class="col-md-4">
+                {{ form_row(searchForm.title) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_row(searchForm.companyType, {'attr': {'class': 'tom-select'}}) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_row(searchForm.societe, {'attr': {'class': 'tom-select'}}) }}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Rechercher</button>
+        {{ form_end(searchForm) }}
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    <a href="{{ path('app_document_search', app.request.query.all|merge({
+                        'sort': 'id',
+                        'direction': app.request.query.get('direction', 'asc') == 'asc' ? 'desc' : 'asc'
+                    })) }}">
+                        ID
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ path('app_document_search', app.request.query.all|merge({
+                        'sort': 'title',
+                        'direction': app.request.query.get('direction', 'asc') == 'asc' ? 'desc' : 'asc'
+                    })) }}">
+                        Titre
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ path('app_document_search', app.request.query.all|merge({
+                        'sort': 'companyType',
+                        'direction': app.request.query.get('direction', 'asc') == 'asc' ? 'desc' : 'asc'
+                    })) }}">
+                        Type de société
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ path('app_document_search', app.request.query.all|merge({
+                        'sort': 'societe',
+                        'direction': app.request.query.get('direction', 'asc') == 'asc' ? 'desc' : 'asc'
+                    })) }}">
+                        Société
+                    </a>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for document in pagination %}
+                <tr>
+                    <td>{{ document.id }}</td>
+                    <td>{{ document.title }}</td>
+                    <td>{{ document.companyType.name ?? 'N/A' }}</td>
+                    <td>
+                        {% if document.societeDocuments|length > 0 %}
+                            {% for societeDocument in document.societeDocuments %}
+                                {{ societeDocument.societe.theNameOfTheCompany }}
+                                {% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {{ knp_pagination_render(pagination) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new TomSelect('.tom-select', {
+                create: false,
+                sortField: {field: 'text'}
+            });
+        });
+    </script>
+{% endblock %}

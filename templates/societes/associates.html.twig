@@ -1,0 +1,24 @@
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Adresse</th>
+        <th>Ville</th>
+        <th>Nationalité</th>
+        <th>Date de naissance</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for associate in associates %}
+        <tr>
+            <td>{{ associate.firstName }}</td>
+            <td>{{ associate.lastName }}</td>
+            <td>{{ associate.address }}</td>
+            <td>{{ associate.city }}</td>
+            <td>{{ associate.nationality }}</td>
+            <td>{{ associate.dateOfBirth|date('Y-m-d') }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
